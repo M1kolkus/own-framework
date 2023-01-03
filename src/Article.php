@@ -1,33 +1,21 @@
 <?php
 
-use App\Connect;
+namespace App;
 
-class Article
+use App\Model;
+use App\DB;
+use Exception;
+
+class Article extends Model
 {
-    public int $id = 0;
+    protected string $tableName = 'articles';
+    protected ?int $id = null;
     public string $title;
     public string $content;
 
-    public static function find(int $id): object|false
+    protected function request(): string
     {
-       $find = Connect::db()->query("SELECT * FROM articles WHERE id = " . $id);
-       return $find->fetchObject();
-    }
-
-    public function save()
-    {
-        if ($this->id > 0) {
-            Connect::db()->query("UPDATE articles SET title='{$this->title}', content='{$this->content}' WHERE id = {$this->id}");
-        } else {
-            Connect::db()->query("INSERT INTO articles SET title='{$this->title}', content='{$this->content}'");
-            $id = (Connect::db()->query("SELECT MAX(id) FROM articles")->fetchAll());
-            $this->id = $id[0][0];
-        }
-    }
-
-    public function delete()
-    {
-        Connect::db()->query("DELETE FROM articles WHERE ID = " . $this->id);
+        return "title='{$this->title}', content='{$this->content}'";
     }
 }
 
