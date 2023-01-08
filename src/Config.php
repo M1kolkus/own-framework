@@ -4,12 +4,11 @@ namespace App;
 
 class Config
 {
-    public array $data;
+    private array $data;
 
     public function __construct()
     {
-        include __DIR__ . '/../config.php';
-        $this->data = $connectionData;
+        $this->data = include __DIR__ . '/../config.php';
     }
 
     public function host(): string
