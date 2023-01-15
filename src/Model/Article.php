@@ -12,11 +12,18 @@ class Article extends Model
     protected ?int $id = null;
     public string $title;
     public string $content;
+    protected string $object = 'App\Article';
 
     protected function request(): string
     {
-        return "title='{$this->title}', content='{$this->content}'";
+        return "title=:title, content=:content";
+    }
+
+    protected function getParams(): array
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+        ];
     }
 }
-
-
