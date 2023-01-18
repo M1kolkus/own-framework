@@ -1,18 +1,16 @@
 <?php
 
-namespace App;
-
-use App\Model;
-use App\DB;
-use Exception;
+namespace App\Model;
 
 class Article extends Model
 {
-    protected string $tableName = 'articles';
+    protected static string $tableName = 'articles';
+    protected string $table = 'articles';
     protected ?int $id = null;
     public string $title;
     public string $content;
-    protected string $object = 'App\Article';
+    protected static string $objectName = 'App\Model\Article';
+    protected string $object = 'App\Model\Article';
 
     protected function request(): string
     {

@@ -1,17 +1,17 @@
 <?php
 
-namespace App;
-
-use App\Model;
+namespace App\Model;
 
 class Comment extends Model
 {
-    protected string $tableName = 'comments';
+    protected static string $tableName = 'comments';
+    protected string $table = 'comments';
     public int $articleId;
     public string $title;
     public string $content;
     public int $isPublished;
-    protected string $object = 'App\Comment';
+    protected static string $objectName = 'App\Model\Comment';
+    protected string $object = 'App\Model\Comment';
 
     protected function request(): string
     {

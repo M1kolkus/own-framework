@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'host' => '123.4.4.3',
+    'dbname' => 'db',
+    'userName' => 'root',
+    'password' => '5555'
+];

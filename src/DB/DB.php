@@ -1,45 +1,44 @@
 <?php
 
-namespace App;
+namespace App\DB;
 
-use Exception;
-use PDO;
-use PDOException;
 use App\Config;
+use PDO;
 
 class DB
 {
-    private Config $config;
+    private static ?DB $instance = null;
+    private PDO $pdo;
 
-    public function __construct()
+    private function __construct()
     {
-        $this->config = Config::getInstance();
+        $config = Config::getInstance();
+        $this->pdo =  new PDO(
+            "mysql:host={$config->host()};dbname={$config->dbName()}",
+            $config->userName(),
+            $config->password()
+        );
     }
 
-    /**
-     * @throws Exception
-     */
-    public function db(): PDO
+    public static function getInstance(): self
     {
-        try {
-            $db = new PDO(
-                "mysql:host={$this->config->host()};dbname={$this->config->dbName()}",
-                $this->config->userName(),
-                $this->config->password()
-            );
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException) {
-            throw new Exception('Извините. Проблемы подключения к БД.');
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
 
-        return $db;
+        return self::$instance;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function query($sql): object
+     public function query($sql, $params = []): array
     {
-        return $this->db()->query($sql);
+        if ($params === []) {
+            $this->pdo->query($sql);
+            exit();
+        }
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params['params']);
+
+        return $sth->fetchAll(PDO::FETCH_CLASS, $params['object']);
     }
 }
