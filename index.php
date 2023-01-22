@@ -12,10 +12,15 @@ require_once __DIR__ . '/vendor/autoload.php';
 //order by count desc
 //limit 3;
 
-Router::route('/', function(){
-   $a = \App\Model\Article::find(4);
-    print_r($a);
+//Router::route('/', function(){
+//   $a = \App\Model\Article::find(4);
+//    print_r($a);
+//
+//});
+//
+//Router::execute($_SERVER['REQUEST_URI']);
 
-});
 
-Router::execute($_SERVER['REQUEST_URI']);
+$articles = \App\Model\Article::findAll();
+
+print 'test';

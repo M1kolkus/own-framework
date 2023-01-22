@@ -13,10 +13,11 @@ class DB
     private function __construct()
     {
         $config = Config::getInstance();
-        $this->pdo =  new PDO(
+        $this->pdo = new PDO(
             "mysql:host={$config->host()};dbname={$config->dbName()}",
             $config->userName(),
-            $config->password()
+            $config->password(),
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
     }
 
@@ -29,16 +30,32 @@ class DB
         return self::$instance;
     }
 
-     public function query($sql, $params = []): array
+    public function query(string $sql, array $params = [], string $className = null): array
     {
-        if ($params === []) {
-            $this->pdo->query($sql);
-            exit();
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params);
+
+        if (null !== $className) {
+            return $sth->fetchAll(PDO::FETCH_CLASS, $className);
         }
 
-        $sth = $this->pdo->prepare($sql);
-        $sth->execute($params['params']);
+        return $sth->fetchAll(PDO::FETCH_CLASS);
+    }
 
-        return $sth->fetchAll(PDO::FETCH_CLASS, $params['object']);
+    public function exec(string $sql, array $params = []): void
+    {
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($params);
+    }
+
+    public function getLastInsertId(): ?int
+    {
+        $id = $this->pdo->lastInsertId();
+
+        if ($id === false) {
+            return null;
+        }
+
+        return (int) $id;
     }
 }
