@@ -39,6 +39,21 @@ abstract class Model
         return DB::getInstance()->query("SELECT * FROM {$tableName}", [], static::class);
     }
 
+    public static function findOneBy(array $criterias): array
+    {
+        $tableName = static::$tableName;
+        $arrayCriterias = [];
+
+        foreach ($criterias as $where => $criteria) {
+            $arrayCriterias[] = $where . ' = ' . $criteria;
+        }
+
+        $stringCriterias = implode(' AND ', $arrayCriterias);
+
+        return DB::getInstance()
+            ->query("SELECT * FROM {$tableName} WHERE {$stringCriterias}", [], static::class);
+    }
+
     abstract protected function request();
 
     abstract protected function getParams();
