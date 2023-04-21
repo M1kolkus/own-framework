@@ -2,13 +2,18 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\Model\Article;
 use App\Model\Comment;
 
+if (Article::find($_GET['id']) === null) {
+    http_response_code(404);
+}
+
 $newComment = new Comment();
-$newComment->articleId = $_REQUEST['id'];
-$newComment->title = $_REQUEST['title'];
-$newComment->content = $_REQUEST['content'];
+$newComment->articleId = $_GET['id'];
+$newComment->title = $_POST['title'];
+$newComment->content = $_POST['content'];
 $newComment->isPublished = 0;
 $newComment->save();
 
-header("Location: http://localhost:8000/article.php?id={$_REQUEST['id']}");
+header("Location: /article.php?id={$_GET['id']}");
