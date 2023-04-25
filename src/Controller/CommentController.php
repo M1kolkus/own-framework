@@ -24,6 +24,6 @@ class CommentController
         $newComment->isPublished = 0;
         $newComment->save();
 
-        header("Location: /article/article?id={$article->getId()}");
+        header("Location: /article?id={$article->getId()}");
     }
 }
