@@ -8,7 +8,7 @@
 <p><?php echo $comment->content ?></p>
 <?php endforeach ?>
 
-<form action='/addcomment?id=<?php echo $_GET['id'] ?>' method="POST">
+<form action='/comment/add?id=<?php echo $_GET['id'] ?>' method="POST">
     <label for="comment">Введите коментарий</label>
     <label>
         <input name="title" placeholder="Название коментария">
