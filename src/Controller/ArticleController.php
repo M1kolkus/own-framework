@@ -6,17 +6,25 @@ namespace App\Controller;
 
 use App\Model\Article;
 use App\Model\Comment;
+use Twig\Environment;
 
 class ArticleController
 {
-    public function actionIndex(): void
+    private Environment $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    public function actionIndex(): string
     {
         $articles = Article::findAll();
 
-        require __DIR__ . '/../Templates/index.html.php';
+        return $this->twig->render('index.html.twig', ['articles' => $articles]);
     }
 
-    public function actionArticle(): void
+    public function actionArticle(): string
     {
         $article = Article::find((int)$_GET['id']);
 
@@ -27,6 +35,6 @@ class ArticleController
 
         $comments = Comment::findOneBy(['article_id' => $article->getId(), 'is_published' => 1]);
 
-        require __DIR__ . '/../Templates/article.html.php';
+        return $this->twig->render('article.html.twig', ['article' => $article, 'comments' => $comments]);
     }
 }

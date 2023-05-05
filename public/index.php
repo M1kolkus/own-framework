@@ -4,6 +4,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $routes = require __DIR__ . '/../routes.php';
 
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/Templates');
+$twig = new \Twig\Environment($loader, [
+    'cache' => __DIR__ . '/../cache',
+    'auto_reload' => true,
+]);
+
 $url = $_SERVER['REQUEST_URI'];
 $url = explode('?', $url)[0];
 
@@ -22,8 +28,8 @@ if (array_key_exists($url, $routes)) {
 }
 
 try {
-    $controller = new $controllerName();
-    $controller->$actionName();
+    $controller = new $controllerName($twig);
+    echo $controller->$actionName();
 } catch (Throwable $exception) {
-    $a = 'dasfda';
+    echo $exception->getMessage();
 }
