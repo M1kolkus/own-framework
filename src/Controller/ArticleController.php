@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Http\Request;
+use App\Http\Response;
 use App\Model\Article;
 use App\Model\Comment;
 use App\View\View;
@@ -17,16 +19,16 @@ class ArticleController
         $this->view = View::getInstance();
     }
 
-    public function actionIndex(): string
+    public function actionIndex(Request $request): Response
     {
         $articles = Article::findAll();
 
-        return $this->view->render('index.html.twig', ['articles' => $articles]);
+        return new Response($this->view->render('index.html.twig', ['articles' => $articles]));
     }
 
-    public function actionArticle(): string
+    public function actionArticle(Request $request): Response
     {
-        $article = Article::find((int)$_GET['id']);
+        $article = Article::find((int)$request->getAttributes()['id']);
 
         if ($article === null) {
             http_response_code(404);
@@ -35,6 +37,6 @@ class ArticleController
 
         $comments = Comment::findOneBy(['article_id' => $article->getId(), 'is_published' => 1]);
 
-        return $this->view->render('article.html.twig', ['article' => $article, 'comments' => $comments]);
+        return new Response($this->view->render('article.html.twig', ['article' => $article, 'comments' => $comments]));
     }
 }
