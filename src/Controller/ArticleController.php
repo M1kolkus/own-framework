@@ -28,7 +28,7 @@ class ArticleController
 
     public function actionArticle(Request $request): Response
     {
-        $article = Article::find((int)$request->getAttributes()['id']);
+        $article = Article::find((int)$request->getAttribute('id'));
 
         if ($article === null) {
             http_response_code(404);

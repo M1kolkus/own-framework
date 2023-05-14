@@ -30,6 +30,11 @@ class Request
         return $this->attributes;
     }
 
+    public function getAttribute(string $name, mixed $default = null): mixed
+    {
+        return $this->attributes[$name] ?? $default;
+    }
+
     public function getPost(): array
     {
         return $this->post;

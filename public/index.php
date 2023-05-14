@@ -11,7 +11,7 @@ $url = explode('?', $url)[0];
 
 $headers = [];
 foreach ($_SERVER as $header => $value) {
-    if (str_starts_with($header, 'HTTP')) {
+    if (str_starts_with($header, 'HTTP_')) {
         $headerArray = array_slice(explode('_', $header), 1);
         $header = strtolower(implode('-', $headerArray));
         $headers[$header] = $value;
@@ -38,7 +38,15 @@ if (array_key_exists($url, $routes)) {
 
 try {
     $controller = new $controllerName();
-    echo $controller->$actionName($request)->getContent();
+    /** @var \App\Http\Response $response */
+    $response = $controller->$actionName($request);
+    http_response_code($response->getStatusCode());
+
+    foreach ($response->getHeaders() as $header => $value) {
+        header("{$header}: {$value}");
+    }
+
+    echo $response->getContent();
 } catch (Throwable $exception) {
     echo $exception->getMessage();
 }
