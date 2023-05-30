@@ -15,21 +15,22 @@ use App\View\View;
 class ArticleController
 {
     private View $view;
+    private ?User $currentUser;
 
     public function __construct()
     {
         $this->view = View::getInstance();
+        $currentUserId = Session::get('currentUserId');
+        $this->currentUser = $currentUserId === null ? $currentUserId : User::find($currentUserId);
     }
 
     public function actionIndex(Request $request): Response
     {
         $articles = Article::findAll();
-        $currentUserId = Session::get('currentUserId');
-        $currentUser = $currentUserId === null ? $currentUserId : User::find($currentUserId);
 
         return new Response($this->view->render(
             'index.html.twig',
-            ['articles' => $articles, 'currentUser' => $currentUser]
+            ['articles' => $articles, 'currentUser' => $this->currentUser]
         ));
     }
 
@@ -43,12 +44,10 @@ class ArticleController
         }
 
         $comments = Comment::findOneBy(['article_id' => $article->getId(), 'is_published' => 1]);
-        $currentUserId = Session::get('currentUserId');
-        $currentUser = $currentUserId === null ? $currentUserId : User::find($currentUserId);
 
         return new Response($this->view->render(
             'article.html.twig',
-            ['article' => $article, 'comments' => $comments, 'currentUser' => $currentUser]
+            ['article' => $article, 'comments' => $comments, 'currentUser' => $this->currentUser]
         ));
     }
 }
