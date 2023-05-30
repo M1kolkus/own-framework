@@ -1,12 +1,23 @@
 <?php
 
+use App\Controller\ArticleController;
+use App\Controller\UserController;
+
 return [
     '/' => [
-        'controller' => \App\Controller\ArticleController::class,
+        'controller' => ArticleController::class,
         'method' => 'actionIndex',
     ],
     '/article' => [
-        'controller' => \App\Controller\ArticleController::class,
+        'controller' => ArticleController::class,
         'method' => 'actionArticle',
+    ],
+    '/registration' => [
+        'controller' => UserController::class,
+        'method' => 'actionRegistration',
+    ],
+    '/login' => [
+        'controller' => UserController::class,
+        'method' => 'actionLogin',
     ],
 ];

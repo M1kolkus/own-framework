@@ -1,0 +1,9 @@
+<html>
+{% if currentUser == null %}
+    <p><a href='/login'> Вход </a> </p>
+    <p><a href='/registration'> Регистрация </a> </p>
+{% else %}
+    <p>{{ currentUser.getEmail }}</p>
+    <p><a href='/user/exit'> Выход </a> </p>
+{% endif %}
+</html>

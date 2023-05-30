@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Request;
+use App\Http\Response;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+
+session_start();
 
 $routes = require __DIR__ . '/../routes.php';
 
@@ -38,9 +41,10 @@ if (array_key_exists($url, $routes)) {
 
 try {
     $controller = new $controllerName();
-    /** @var \App\Http\Response $response */
+    /** @var Response $response */
     $response = $controller->$actionName($request);
     http_response_code($response->getStatusCode());
+    $_SESSION['user'] = $response->getCookie()['user'];
 
     foreach ($response->getHeaders() as $header => $value) {
         header("{$header}: {$value}");

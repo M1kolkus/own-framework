@@ -1,3 +1,5 @@
+{% include 'layout.html.twig' %}
+
 {% for article in articles %}
     <h2><a href='/article?id={{ article.getId }}'> {{ article.title }} </a> </h2>
     <p> {{ article.content }} </p>

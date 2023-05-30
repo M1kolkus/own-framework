@@ -46,4 +46,14 @@ class Response
 
         return $this;
     }
+
+    public function getCookie(): array
+    {
+        return $this->cookie;
+    }
+
+    public function setCookie(array $cookie): void
+    {
+        $this->cookie = $cookie;
+    }
 }

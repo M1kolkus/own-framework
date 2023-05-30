@@ -39,4 +39,9 @@ class Request
     {
         return $this->post;
     }
+
+    public function setCookies(array $cookies): void
+    {
+        $this->cookies = array_merge($this->cookies, $cookies);
+    }
 }

@@ -5,7 +5,6 @@ namespace App\Model;
 class Article extends Model
 {
     protected static string $tableName = 'articles';
-    protected ?int $id = null;
     public string $title;
     public string $content;
 

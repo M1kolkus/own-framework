@@ -45,10 +45,12 @@ abstract class Model
         $arrayCriterias = [];
 
         foreach ($criterias as $where => $criteria) {
-            $arrayCriterias[] = $where . ' = ' . $criteria;
+            $arrayCriterias[] = "{$where} = '{$criteria}'";
         }
 
         $stringCriterias = implode(' AND ', $arrayCriterias);
+
+        $sql = "SELECT * FROM {$tableName} WHERE {$stringCriterias}";
 
         return DB::getInstance()
             ->query("SELECT * FROM {$tableName} WHERE {$stringCriterias}", [], static::class);
